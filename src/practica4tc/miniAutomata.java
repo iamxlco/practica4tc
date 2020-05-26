@@ -1,18 +1,22 @@
 package practica4tc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public final class miniAutomata {
     
     private int q, t;
-    private String[][] automata;
+    private List<String[]> automata = new ArrayList<String[]>();
+    private List<String[]> reduced;
     private final Scanner scan = new Scanner(System.in);;
     
     public miniAutomata(){
         writeInstructions();
         getDimensions();
         getAutomata();
-        printAutomata(automata);
+        reduced = reduceAutomata(automata);
+        printAutomata(reduced);
     }
     
     public void writeInstructions(){
@@ -28,13 +32,11 @@ public final class miniAutomata {
     }
     
     public void getDimensions(){
-        System.out.print("\nIntroduce el número de estados: ");
+        System.out.print("\nNúmero de estados: ");
         q = Integer.parseInt(scan.nextLine());
-        System.out.print("\nIntroduce el número de transiciones: ");
+        System.out.print("\nNúmero de transiciones: ");
         t = Integer.parseInt(scan.nextLine());
         System.out.println("");
-        
-        automata = new String[q][t+1];
     }
     
     public void getAutomata(){
@@ -45,23 +47,68 @@ public final class miniAutomata {
             String edo[];
             linea = scan.nextLine();
             edo = linea.split(" ");
-            automata[i] = edo;
+            automata.add(edo);
         }
     }
     
-    public void printAutomata(String[][] a){
+    public void printAutomata(List<String[]> a){
+        System.out.println("\nAUTOMATA REDUCIDO");
+        
         System.out.print("Q");
         for(int i=0;i<t;i++){
             System.out.print("\tQ("+(i+1)+")");
         }
         System.out.println("");
-        for(int i=0;i<q;i++){
-            System.out.print(a[i][0]);
-            for(int j=1;j<=t;j++){
-                System.out.print("\t"+a[i][j]+"");
+        
+        for(String fila[]: a){
+            for(int i=0;i<fila.length;i++){
+                System.out.print(fila[i]+"\t");
             }
             System.out.println("");
         }
     }
     
+    public List<String[]> reduceAutomata(List<String[]> auto){
+        auto = equivalentClasses(auto);
+        auto = removeRepeated(auto);
+        
+        return auto;
+    }
+    
+    public List<String[]> equivalentClasses(List<String[]> auto){
+        for(String[] fila: auto){
+            for(String[] row: auto){
+                if(areEquals(fila, row)){
+                    String old = row[0], nw = fila[0];
+                    for(String[] change: auto){
+                        for(int i=0;i<change.length;i++)
+                            if(change[i].equals(old))
+                                change[i] = nw;
+                    }
+                    equivalentClasses(auto);
+                }
+            }
+        }
+        
+        return auto;
+    }
+    
+    public List<String[]> removeRepeated(List<String[]> auto){
+        return auto;
+    }
+    
+    public boolean areEquals(String[] a, String[] b){
+        boolean theyAre=true;
+        
+        if(a[0].equals(b[0]))
+            return false;
+        
+        for(int i=1;i<a.length;i++){
+            if(!a[i].equals(b[i]))
+                theyAre = false;
+        }
+        
+        
+        return theyAre;
+    }
 }
