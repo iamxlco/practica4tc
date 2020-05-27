@@ -7,22 +7,23 @@ import java.util.Scanner;
 public final class miniAutomata {
     
     private int q, t;
-    private List<String[]> automata = new ArrayList<String[]>();
-    private List<String[]> reduced;
+    private List<String[]> automata = new ArrayList<>();
     private final Scanner scan = new Scanner(System.in);;
     
     public miniAutomata(){
         writeInstructions();
         getDimensions();
         getAutomata();
-        reduced = reduceAutomata(automata);
-        printAutomata(reduced);
+        automata = equivalentClasses(automata);
+        printAutomata(automata);
     }
     
     public void writeInstructions(){
         System.out.println("Instrucciones:"
                 + "\n1.-Introduce un estado de la siguiente manera:"
                 + "\n\tQ\tQ(1)\tQ(2)\t...Q(n)"
+                + "\n\tA\tB\tC\t...N"
+                + "\n\tB\tD\tE\t...M"
                 + "\nDonde:"
                 + "\n\tQ: Estado actual"
                 + "\n\tQ(1): Primera transición"
@@ -34,13 +35,11 @@ public final class miniAutomata {
     public void getDimensions(){
         System.out.print("\nNúmero de estados: ");
         q = Integer.parseInt(scan.nextLine());
-        System.out.print("\nNúmero de transiciones: ");
-        t = Integer.parseInt(scan.nextLine());
         System.out.println("");
     }
     
     public void getAutomata(){
-        System.out.println("Por favor ingresa el autómata");
+        System.out.println("Por favor ingresa el autómata\n");
         
         String linea = "";       
         for(int i=0; i<q ; i++){
@@ -55,7 +54,7 @@ public final class miniAutomata {
         System.out.println("\nAUTOMATA REDUCIDO");
         
         System.out.print("Q");
-        for(int i=0;i<t;i++){
+        for(int i=0;i<automata.size()-1;i++){
             System.out.print("\tQ("+(i+1)+")");
         }
         System.out.println("");
@@ -68,23 +67,17 @@ public final class miniAutomata {
         }
     }
     
-    public List<String[]> reduceAutomata(List<String[]> auto){
-        auto = equivalentClasses(auto);
-        auto = removeRepeated(auto);
-        
-        return auto;
-    }
-    
-    public List<String[]> equivalentClasses(List<String[]> auto){
-        for(String[] fila: auto){
-            for(String[] row: auto){
-                if(areEquals(fila, row)){
-                    String old = row[0], nw = fila[0];
-                    for(String[] change: auto){
-                        for(int i=0;i<change.length;i++)
-                            if(change[i].equals(old))
-                                change[i] = nw;
+    public List<String[]> equivalentClasses(List<String[]> auto){        
+        for(int i=0;i<auto.size();i++){
+            for(int j=0;j<auto.size();j++){
+                if(areEquals(auto.get(i), auto.get(j))){
+                    String old = auto.get(j)[0], nw = auto.get(i)[0];
+                    for(int k=0;k<auto.size();k++){
+                        for(int l=0;l<auto.get(k).length;l++)
+                            if(auto.get(k)[l].equals(old))
+                                auto.get(k)[l] = nw;
                     }
+                    auto.remove(j);
                     equivalentClasses(auto);
                 }
             }
@@ -92,10 +85,7 @@ public final class miniAutomata {
         
         return auto;
     }
-    
-    public List<String[]> removeRepeated(List<String[]> auto){
-        return auto;
-    }
+
     
     public boolean areEquals(String[] a, String[] b){
         boolean theyAre=true;
