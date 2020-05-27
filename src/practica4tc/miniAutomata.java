@@ -20,7 +20,7 @@ public final class miniAutomata {
     
     public void writeInstructions(){
         System.out.println("Instrucciones:"
-                + "\n1.-Introduce un estado de la siguiente manera:"
+                + "\n1.-Introduce un automata de la siguiente manera:"
                 + "\n\tQ\tQ(1)\tQ(2)\t...Q(n)"
                 + "\n\tA\tB\tC\t...N"
                 + "\n\tB\tD\tE\t...M"
@@ -55,7 +55,7 @@ public final class miniAutomata {
         
         System.out.print("Q");
         for(int i=0;i<automata.size()-1;i++){
-            System.out.print("\tQ("+(i+1)+")");
+            System.out.print("\tQ("+(i)+")");
         }
         System.out.println("");
         
