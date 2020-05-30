@@ -69,7 +69,7 @@ public final class miniAutomata {
     
     public List<String[]> equivalentClasses(List<String[]> auto){        
         for(int i=0;i<auto.size();i++){
-            for(int j=auto.size()-1;j>=0;j--){
+            for(int j=0;j<auto.size();j++){
                 if(areEquals(auto.get(i), auto.get(j))){
                     String old = auto.get(j)[0], nw = auto.get(i)[0];
                     for(int k=0;k<auto.size();k++){
