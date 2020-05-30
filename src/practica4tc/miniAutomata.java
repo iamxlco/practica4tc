@@ -54,7 +54,7 @@ public final class miniAutomata {
         System.out.println("\nAUTOMATA REDUCIDO");
         
         System.out.print("Q");
-        for(int i=1;i<automata.size()-1;i++){
+        for(int i=0;i<automata.size()-1;i++){
             System.out.print("\tQ("+(i)+")");
         }
         System.out.println("");
