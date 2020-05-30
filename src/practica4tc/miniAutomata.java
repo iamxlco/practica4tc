@@ -54,7 +54,7 @@ public final class miniAutomata {
         System.out.println("\nAUTOMATA REDUCIDO");
         
         System.out.print("Q");
-        for(int i=0;i<automata.size()-1;i++){
+        for(int i=1;i<automata.size()-1;i++){
             System.out.print("\tQ("+(i)+")");
         }
         System.out.println("");
@@ -69,7 +69,7 @@ public final class miniAutomata {
     
     public List<String[]> equivalentClasses(List<String[]> auto){        
         for(int i=0;i<auto.size();i++){
-            for(int j=0;j<auto.size();j++){
+            for(int j=auto.size()-1;j>=0;j--){
                 if(areEquals(auto.get(i), auto.get(j))){
                     String old = auto.get(j)[0], nw = auto.get(i)[0];
                     for(int k=0;k<auto.size();k++){
